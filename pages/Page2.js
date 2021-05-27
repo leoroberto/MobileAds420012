@@ -1,28 +1,16 @@
 import React from 'react'
 import { View, Text, StyleSheet, Button } from 'react-native'
 import Header from './components/Header'
-import axios from 'axios';
 import { TextInput } from 'react-native-gesture-handler';
+import {consultarEndereco} from '../services/apiCep';
 
 const Page2 = ({navigation}) => {
 
   const [cep, setCep] = React.useState('');
 
-  const buscar = () => {
-    //Pegar o cep e juntar a url do viacep - https://viacep.com.br/ws/54440390/json/
-    const url = `https://viacep.com.br/ws/${cep}/json/`
-    //Chamar o viacep através do Axios
-    axios.get(url).then((res) => {
-      //Tratar os dados que vieram do viacep
-      const endereco = {
-        rua: res.data.logradouro,
-        complemento: res.data.complemento,
-        bairro: res.data.bairro,
-        cidade: res.data.localidade,
-        estado: res.data.uf
-      };
-      //Mandar para a próxima página
-    });
+  const buscar = async () => {
+    const endereco = await consultarEndereco(cep);
+    navigation.navigate('Pages3', endereco);
   };
 
     return (
